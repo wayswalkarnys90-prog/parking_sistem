@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Parkir - Gedung Pinisi</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- KOLOM KIRI: PARKIR + PORTAL MASUK -->
+        <div class="left-section">
+            
+            <!-- 10 Slot Parkir -->
+            <div class="parking-lane">
+                <% for(let i = 10; i >= 1; i--) { %>
+                    <div id="slot-<%= i %>" class="slot free">
+                        <div class="slot-content">
+                            <span class="slot-name">Slot <%= i %></span>
+                            <span class="slot-status" id="status-text-<%= i %>">Kosong</span>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Portal Masuk (Sekarang di bawah slot) -->
+            <div class="portal-wrapper">
+                <div class="portal portal-in">
+                    <span>Portal Masuk</span>
+                </div>
+                <!-- Tombol Exit kecil di samping portal -->
+                <div class="gate-bar-in">Exit</div>
+            </div>
+
+        </div>
+
+        <!-- KOLOM KANAN: JALAN & PORTAL KELUAR -->
+        <div class="road-area">
+            
+            <h1 class="title">Basement Gedung Pinisi</h1>
+
+            <!-- Garis Jalan (Menghubungkan Portal Masuk ke Keluar) -->
+            <div class="road-line-vertical">
+                <span class="road-label">Jalan Keluar</span>
+            </div>
+            <div class="road-line-horizontal"></div>
+
+            <!-- Portal Keluar -->
+            <div class="portal portal-out">
+                <span>Portal Keluar</span>
+            </div>
+            <div class="gate-bar-out">Exit</div>
+
+        </div>
+    </div>
+
+    <script src="/js/monitor.js"></script>
+</body>
+</html>

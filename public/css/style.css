@@ -1,0 +1,449 @@
+/* public/css/style.css */
+
+/* --- CONFIG & VARIABLES --- */
+:root {
+    --bg-app: #1e232f;
+    --bg-panel: #242b3d;
+    --bg-road: #334155;
+    --color-free: #10b981;
+    --color-busy: #ef4444;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+/* --- CONTAINER UTAMA --- */
+.main-container {
+    display: flex;
+    width: 98%;
+    height: 95vh;
+    margin: 10px auto;
+    background-color: var(--bg-panel);
+    border-radius: 16px;
+    padding: 20px;
+    gap: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* --- BAGIAN KIRI (DAFTAR SLOT) --- */
+.left-section {
+    display: flex;
+    flex-direction: column;
+    width: 350px; 
+    height: 100%;
+    border-right: 2px dashed #3f4a61;
+    padding-right: 20px;
+    flex-shrink: 0;
+}
+
+.parking-lane {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    overflow-y: auto; 
+    padding-right: 5px;
+    padding-bottom: 10px;
+}
+
+/* Scrollbar Custom */
+.parking-lane::-webkit-scrollbar { width: 6px; }
+.parking-lane::-webkit-scrollbar-thumb { background: #3f4a61; border-radius: 3px; }
+
+/* --- STYLING SLOT --- */
+.slot {
+    width: 100%;
+    min-height: 60px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    transition: all 0.3s ease;
+    background-color: rgba(0,0,0,0.2); 
+    border: 1px solid #3f4a61;
+}
+
+.slot-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slot-name {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.slot-status {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.slot::after {
+    content: 'P';
+    font-weight: 900;
+    font-size: 1.2rem;
+    opacity: 0.2;
+}
+
+/* WARNA STATUS */
+.free {
+    border: 1px solid var(--color-free);
+    background: rgba(16, 185, 129, 0.1); 
+    color: var(--color-free);
+}
+.free .slot-status::after { content: '✔'; font-size: 0.8rem; }
+
+.occupied {
+    border: 1px solid var(--color-busy);
+    background: rgba(239, 68, 68, 0.1); 
+    color: var(--color-busy);
+}
+.occupied .slot-status::after { content: '✖'; font-size: 0.8rem; }
+
+/* --- PORTAL MASUK --- */
+.portal-wrapper {
+    margin-top: 15px;
+    height: 50px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.portal-in {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #1e293b, #0f172a);
+    border: 1px solid #475569;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.portal-in::after { content: '→'; font-size: 1.2rem; color: var(--color-free); }
+.gate-bar-in { display: none; } 
+
+/* --- BAGIAN KANAN (AREA JALAN / PETA) --- */
+.road-area {
+    flex-grow: 1;
+    position: relative;
+    background: rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden; 
+}
+
+/* Judul (Default Desktop: di bawah) */
+.title {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    z-index: 10;
+}
+
+/* JALAN RAYA */
+.road-line-vertical {
+    position: absolute;
+    left: 40px; 
+    bottom: 0; 
+    top: 90px;
+    width: 80px; 
+    background-color: var(--bg-road); 
+    border-left: 3px solid #475569; 
+    border-right: 3px solid #475569; 
+    z-index: 1;
+}
+
+.road-line-vertical::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, #94a3b8 50%, transparent 50%);
+    background-size: 100% 60px; 
+    opacity: 0.5;
+}
+
+.road-line-horizontal {
+    position: absolute;
+    left: 40px; 
+    top: 90px;
+    right: 180px; 
+    height: 80px; 
+    background-color: var(--bg-road);
+    border-top: 3px solid #475569;
+    border-bottom: 3px solid #475569;
+    z-index: 1;
+}
+
+.road-line-horizontal::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 4px;
+    transform: translateY(-50%);
+    background: linear-gradient(to right, #94a3b8 50%, transparent 50%);
+    background-size: 60px 100%;
+    opacity: 0.5;
+}
+
+.road-label {
+    position: absolute;
+    top: 50%; left: -60px;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 0.8rem; color: var(--text-muted); letter-spacing: 2px;
+}
+
+/* PORTAL KELUAR */
+.portal-out {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: white;
+    font-weight: 700;
+    z-index: 5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    font-size: 0.85rem;
+}
+
+.portal-out::before {
+    content: 'EXIT';
+    font-size: 0.7rem;
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-busy);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--color-busy);
+}
+.gate-bar-out { display: none; }
+
+
+/* =========================================
+   RESPONSIVE (MOBILE) - LAYOUT SEPERTI DESKTOP
+   ========================================= */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .main-container {
+        flex-direction: row;
+        height: 100vh;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    /* Bagian Slot Parkir - Tetap di Kiri */
+    .left-section {
+        width: 140px;
+        height: 100%;
+        border-right: 2px dashed #3f4a61;
+        border-bottom: none;
+        padding-right: 10px;
+        padding-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .parking-lane {
+        gap: 8px;
+        overflow-y: auto;
+    }
+
+    /* Bagian Peta Jalan - Tetap di Kanan */
+    .road-area {
+        flex-grow: 1;
+        height: 100%;
+        min-height: auto;
+        position: relative;
+    }
+
+    /* Judul */
+    .title {
+        position: absolute;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    /* Portal Keluar */
+    .portal-out {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 0.65rem;
+        gap: 5px;
+    }
+
+    .portal-out::before {
+        font-size: 0.6rem;
+        padding: 2px 4px;
+    }
+
+    /* Jalan Vertikal */
+    .road-line-vertical {
+        left: 20px;
+        top: 60px;
+        bottom: 60px;
+        width: 50px;
+    }
+
+    .road-line-vertical::after {
+        background-size: 100% 30px;
+    }
+
+    /* Jalan Horizontal */
+    .road-line-horizontal {
+        left: 20px;
+        top: 60px;
+        right: 20px;
+        height: 50px;
+    }
+
+    .road-line-horizontal::after {
+        background-size: 30px 100%;
+    }
+
+    /* Label Jalan */
+    .road-label {
+        left: -30px;
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+    }
+
+    /* Portal Masuk */
+    .portal-wrapper {
+        height: 45px;
+        margin-top: 10px;
+    }
+
+    .portal-in {
+        font-size: 0.7rem;
+        padding: 0 12px;
+    }
+
+    .portal-in::after {
+        font-size: 1rem;
+    }
+
+    /* Slot */
+    .slot {
+        min-height: 50px;
+        padding: 0 10px;
+    }
+
+    .slot-name {
+        font-size: 0.55rem;
+    }
+
+    .slot-status {
+        font-size: 0.75rem;
+    }
+
+    .slot::after {
+        font-size: 1rem;
+    }
+
+    .free .slot-status::after,
+    .occupied .slot-status::after {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    .left-section {
+        width: 120px;
+        padding-right: 8px;
+    }
+
+    .title {
+        font-size: 0.9rem;
+        bottom: 10px;
+    }
+
+    .road-line-vertical {
+        left: 15px;
+        width: 40px;
+    }
+
+    .road-line-horizontal {
+        left: 15px;
+        right: 15px;
+        height: 40px;
+    }
+
+    .portal-out {
+        padding: 5px 10px;
+        font-size: 0.6rem;
+    }
+
+    .slot {
+        min-height: 45px;
+        padding: 0 8px;
+    }
+
+    .slot-name {
+        font-size: 0.5rem;
+    }
+
+    .slot-status {
+        font-size: 0.7rem;
+    }
+
+    .portal-in {
+        font-size: 0.65rem;
+        padding: 0 10px;
+    }
+}
