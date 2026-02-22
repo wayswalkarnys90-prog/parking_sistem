@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoring Parkir Otomatis- Gedung Pinisi</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
     <div class="main-container">
-        
+
         <!-- KOLOM KIRI: PARKIR + PORTAL MASUK -->
         <div class="left-section">
-            
+
             <!-- 10 Slot Parkir -->
             <div class="parking-lane">
-                <% for(let i = 10; i >= 1; i--) { %>
+                <% for(let i=10; i>= 1; i--) { %>
                     <div id="slot-<%= i %>" class="slot free">
                         <div class="slot-content">
                             <span class="slot-name">Slot <%= i %></span>
                             <span class="slot-status" id="status-text-<%= i %>">Kosong</span>
                         </div>
                     </div>
-                <% } %>
+                    <% } %>
+            </div>
+
+            <!-- Cari bagian status-header -->
+            <div class="status-header">
+                <span class="status-label">STATUS SERVER:</span> <!-- Ganti Label ini -->
+                <div class="status-indicator offline" id="server-indicator"> <!-- Default offline -->
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="connection-text">WAITING...</span>
+                </div>
             </div>
 
             <!-- Portal Masuk (Sekarang di bawah slot) -->
@@ -38,7 +49,7 @@
 
         <!-- KOLOM KANAN: JALAN & PORTAL KELUAR -->
         <div class="road-area">
-            
+
             <h1 class="title">Basement Parkir Gedung Pinisi</h1>
 
             <!-- Garis Jalan (Menghubungkan Portal Masuk ke Keluar) -->
@@ -58,4 +69,5 @@
 
     <script src="/js/monitor.js"></script>
 </body>
+
 </html>
