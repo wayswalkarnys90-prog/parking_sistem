@@ -1,71 +1,108 @@
-// public/js/monitor.js
+/* public/js/monitor.js */
 
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
+// Elemen Status
+const indicator = document.getElementById('server-indicator');
+const connectionText = document.getElementById('connection-text');
+
+// Timer untuk mendeteksi ESP32 mati
+let espWatchdog;
+
 ws.onopen = () => {
-    console.log("Terhubung ke Sistem Parkir");
+    console.log("Terhubung ke Server (Menunggu Data ESP32...)");
+    // Saat baru buka, kita set WAITING dulu sampai ada data pertama masuk
+    setEspStatus("WAITING");
 };
 
 ws.onmessage = (event) => {
     try {
         const data = JSON.parse(event.data);
         
-        // Normalisasi ID: hapus string "slot-" agar sisa angkanya saja
-        // Contoh: "slot-1" jadi "1"
-        let slotId = data.id.toString().replace('slot-', '');
+        // 1. DATA MASUK! Berarti ESP32 Hidup -> Set Status ONLINE
+        setEspStatus("ONLINE");
 
-        // Panggil fungsi update UI
+        // 2. Reset Timer Kematian (Watchdog)
+        // Kalau 5 detik ke depan gak ada data lagi, anggap OFFLINE
+        clearTimeout(espWatchdog);
+        espWatchdog = setTimeout(() => {
+            setEspStatus("OFFLINE");
+            resetAllSlots(); // Hapus status slot karena data sudah basi
+        }, 5000); // 5 Detik toleransi
+
+        // 3. Update Slot Parkir seperti biasa
+        let slotId = data.id.toString().replace('slot-', '');
         updateSlotUI(slotId, data.distance, data.status);
 
     } catch (e) {
-        console.error("Error parsing JSON", e);
+        console.error("Error data:", e);
     }
 };
 
+ws.onclose = () => {
+    console.log("Koneksi Server Putus");
+    setEspStatus("OFFLINE");
+    resetAllSlots();
+    setTimeout(() => window.location.reload(), 3000);
+};
+
+// --- FUNGSI UPDATE SLOT UI ---
 function updateSlotUI(id, distance, statusOverride) {
     const slotElement = document.getElementById(`slot-${id}`);
     const statusText = document.getElementById(`status-text-${id}`);
-
-    // Jika elemen tidak ditemukan di HTML, stop (biar gak error)
     if (!slotElement) return;
 
-    // --- LOGIKA PENENTUAN STATUS ---
     let isOccupied = false;
-
-    // Prioritas 1: Ikuti status text dari ESP32 (occupied/free)
     if (statusOverride) {
-        if (statusOverride === 'occupied' || statusOverride === 'terisi') {
-            isOccupied = true;
-        } else {
-            isOccupied = false;
-        }
-    } 
-    // Prioritas 2: Jika ESP32 cuma kirim jarak, hitung sendiri
-    else if (distance !== undefined) {
-        // Anggap terisi jika jarak kurang dari 50cm
+        const s = statusOverride.toLowerCase();
+        isOccupied = (s === 'occupied' || s === 'terisi' || s === 'full');
+    } else if (distance !== undefined) {
         isOccupied = (distance < 50 && distance > 0);
     }
 
-    // --- UPDATE TAMPILAN (BUG FIX DISINI) ---
     if (isOccupied) {
-        // KONDISI: TERISI (MERAH)
-        // 1. Hapus class hijau (PENTING!)
         slotElement.classList.remove('free');
-        // 2. Tambah class merah
         slotElement.classList.add('occupied');
-        
-        // Update Teks
-        if(statusText) statusText.innerText = "Terisi";
-
+        if(statusText) statusText.innerText = "TERISI";
     } else {
-        // KONDISI: KOSONG (HIJAU)
-        // 1. Hapus class merah (PENTING! Ini yg sering lupa)
         slotElement.classList.remove('occupied'); 
-        // 2. Tambah class hijau
         slotElement.classList.add('free');
-        
-        // Update Teks
-        if(statusText) statusText.innerText = "Kosong";
+        if(statusText) statusText.innerText = "KOSONG";
+    }
+}
+
+// --- FUNGSI UBAH WARNA INDIKATOR ---
+function setEspStatus(status) {
+    if(!indicator || !connectionText) return;
+
+    // Reset Class dulu
+    indicator.classList.remove('online', 'offline');
+
+    if (status === "ONLINE") {
+        indicator.classList.add('online'); // Hijau
+        connectionText.innerText = "TERHUBUNG"; // Atau "ESP32 LIVE"
+    } 
+    else if (status === "WAITING") {
+        indicator.classList.add('offline'); // Merah (tapi teks beda)
+        connectionText.innerText = "MENUNGGU DATA";
+    }
+    else {
+        // OFFLINE
+        indicator.classList.add('offline'); // Merah
+        connectionText.innerText = "TERPUTUS"; // Atau "ESP32 DOWN"
+    }
+}
+
+// --- FUNGSI RESET TAMPILAN ---
+function resetAllSlots() {
+    for (let i = 1; i <= 10; i++) {
+        const slotElement = document.getElementById(`slot-${i}`);
+        const statusText = document.getElementById(`status-text-${i}`);
+        if (slotElement) {
+            slotElement.classList.remove('occupied');
+            slotElement.classList.add('free');
+            if(statusText) statusText.innerText = "KOSONG";
+        }
     }
 }

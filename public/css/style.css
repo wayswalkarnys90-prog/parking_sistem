@@ -444,3 +444,66 @@ body {
         padding: 0 10px;
     }
 }
+
+/* --- SERVER STATUS INDICATOR --- */
+.status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 5px 15px 5px;
+    border-bottom: 1px solid #3f4a61;
+    margin-bottom: 10px;
+}
+
+.status-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 10;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid #3f4a61;
+    transition: all 0.3s ease;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #64748b; /* Warna default abu */
+    transition: all 0.3s ease;
+}
+
+.status-text {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #64748b;
+}
+
+/* KONDISI ONLINE (HIJAU MENYALA) */
+.online {
+    border-color: var(--color-free);
+    background: rgba(16, 185, 129, 0.1);
+}
+.online .status-dot {
+    background-color: var(--color-free);
+    box-shadow: 0 0 10px var(--color-free); /* Efek Neon */
+}
+.online .status-text { color: var(--color-free); }
+
+/* KONDISI OFFLINE (MERAH) */
+.offline {
+    border-color: var(--color-busy);
+    background: rgba(239, 68, 68, 0.1);
+}
+.offline .status-dot {
+    background-color: var(--color-busy);
+    box-shadow: 0 0 5px var(--color-busy);
+}
+.offline .status-text { color: var(--color-busy); }
