@@ -12,7 +12,6 @@ ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
         
         // Normalisasi ID: hapus string "slot-" agar sisa angkanya saja
-        // Contoh: "slot-1" jadi "1"
         let slotId = data.id.toString().replace('slot-', '');
 
         // Panggil fungsi update UI
@@ -23,49 +22,77 @@ ws.onmessage = (event) => {
     }
 };
 
+// --- BAGIAN BARU: PENANGANAN KONEKSI PUTUS ---
+ws.onclose = () => {
+    console.log("Koneksi terputus! Mereset tampilan...");
+    
+    // 1. Reset semua slot jadi hijau/kosong agar tidak nyangkut merah
+    resetAllSlots();
+
+    // 2. Refresh halaman otomatis setelah 3 detik untuk mencoba konek ulang
+    setTimeout(() => {
+        window.location.reload(); 
+    }, 3000);
+};
+
+ws.onerror = (error) => {
+    console.error("WebSocket Error:", error);
+    ws.close(); // Tutup koneksi agar trigger onclose
+};
+
+// --- FUNGSI UPDATE UI (SATUAN) ---
 function updateSlotUI(id, distance, statusOverride) {
     const slotElement = document.getElementById(`slot-${id}`);
     const statusText = document.getElementById(`status-text-${id}`);
 
-    // Jika elemen tidak ditemukan di HTML, stop (biar gak error)
+    // Jika elemen tidak ditemukan di HTML, stop
     if (!slotElement) return;
 
     // --- LOGIKA PENENTUAN STATUS ---
     let isOccupied = false;
 
-    // Prioritas 1: Ikuti status text dari ESP32 (occupied/free)
+    // Prioritas 1: Ikuti status text dari ESP32
     if (statusOverride) {
-        if (statusOverride === 'occupied' || statusOverride === 'terisi') {
+        const s = statusOverride.toLowerCase();
+        if (s === 'occupied' || s === 'terisi' || s === 'full') {
             isOccupied = true;
         } else {
             isOccupied = false;
         }
     } 
-    // Prioritas 2: Jika ESP32 cuma kirim jarak, hitung sendiri
+    // Prioritas 2: Hitung sendiri dari jarak
     else if (distance !== undefined) {
-        // Anggap terisi jika jarak kurang dari 50cm
         isOccupied = (distance < 50 && distance > 0);
     }
 
-    // --- UPDATE TAMPILAN (BUG FIX DISINI) ---
+    // --- UPDATE TAMPILAN ---
     if (isOccupied) {
         // KONDISI: TERISI (MERAH)
-        // 1. Hapus class hijau (PENTING!)
         slotElement.classList.remove('free');
-        // 2. Tambah class merah
         slotElement.classList.add('occupied');
-        
-        // Update Teks
         if(statusText) statusText.innerText = "Terisi";
-
     } else {
         // KONDISI: KOSONG (HIJAU)
-        // 1. Hapus class merah (PENTING! Ini yg sering lupa)
         slotElement.classList.remove('occupied'); 
-        // 2. Tambah class hijau
         slotElement.classList.add('free');
-        
-        // Update Teks
         if(statusText) statusText.innerText = "Kosong";
+    }
+}
+
+// --- FUNGSI BARU: RESET SEMUA SLOT KE KOSONG ---
+function resetAllSlots() {
+    // Loop dari 1 sampai 10 (sesuai jumlah slot kamu)
+    for (let i = 1; i <= 10; i++) {
+        const slotElement = document.getElementById(`slot-${i}`);
+        const statusText = document.getElementById(`status-text-${i}`);
+
+        if (slotElement) {
+            // Paksa Hapus Merah, Paksa Pasang Hijau
+            slotElement.classList.remove('occupied');
+            slotElement.classList.add('free');
+            
+            // Reset Teks
+            if(statusText) statusText.innerText = "Kosong";
+        }
     }
 }
