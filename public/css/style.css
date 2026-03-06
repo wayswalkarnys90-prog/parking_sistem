@@ -10,6 +10,7 @@
     --text-main: #ffffff;
     --text-muted: #94a3b8;
 
+    /* Komponen Peta Gedung — selaras tema gelap */
     --bg-zone: #1a2235;
     --bg-zone-mid: #1e2a3d;
     --border-zone: #2e3d55;
@@ -268,13 +269,13 @@ body {
    KOMPONEN PETA GEDUNG
    ========================================= */
 
-/* --- ZONA MOTOR ATAS --- */
+/* --- ZONA MOTOR ATAS (berdiri sendiri, di atas jalan) --- */
 .zone-motor-top {
     position: absolute;
-    top: 8px;
-    left: 125px;
+    top: 8px;              /* Di atas jalan horizontal (top:90px) */
+    left: 125px;           /* Di kanan jalan vertikal (left:40 + width:80 + 5) */
     right: 200px;
-    height: 78px;
+    height: 78px;          /* top:8 + height:78 = 86px < road top:90px ✓ */
     background: var(--bg-zone);
     border: 1.5px solid var(--border-zone);
     border-radius: 8px;
@@ -282,7 +283,7 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    z-index: 3;
+    z-index: 3;            /* Di atas jalan (z-index:1) */
 }
 
 .zone-motor-top::before {
@@ -299,11 +300,11 @@ body {
     pointer-events: none;
 }
 
-/* --- WRAPPER BASEMENT MAP --- */
+/* --- WRAPPER BASEMENT MAP (tengah + bawah, mulai setelah jalan) --- */
 .building-map {
     position: absolute;
-    top: 175px;
-    left: 125px;
+    top: 175px;   /* road-horizontal: top:90px + height:80px + 5px gap */
+    left: 125px;  /* road-vertical: left:40px + width:80px + 5px gap */
     right: 20px;
     bottom: 60px;
     display: flex;
@@ -312,7 +313,7 @@ body {
     z-index: 2;
 }
 
-/* --- BASE STYLE ZONE --- */
+/* --- BASE STYLE ZONE (shared) --- */
 .zone-motor-bottom,
 .zone-car,
 .zone-lift {
@@ -364,6 +365,7 @@ body {
     position: relative;
     z-index: 1;
 }
+
 
 /* --- ZONA TENGAH --- */
 .zone-middle {
@@ -447,7 +449,7 @@ body {
     user-select: none;
 }
 
-/* Strip status */
+/* Strip status — garis vertikal di sisi kiri */
 .map-slot::before {
     content: '';
     position: absolute;
@@ -494,6 +496,223 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+}
+
+
+/* =========================================
+   RESPONSIVE (MOBILE) ≤ 768px
+   ========================================= */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .main-container {
+        flex-direction: row;
+        height: 100vh;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .left-section {
+        width: 140px;
+        height: 100%;
+        border-right: 2px dashed #3f4a61;
+        border-bottom: none;
+        padding-right: 10px;
+        padding-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    /* ★ PERUBAHAN 1: slot list bagi rata, tanpa scroll */
+    .parking-lane {
+        gap: 3px;
+        overflow: hidden;
+        flex-grow: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding-right: 0;
+        padding-bottom: 0;
+    }
+
+    /* ★ PERUBAHAN 2: tiap slot mengisi tinggi secara proporsional */
+    .slot {
+        flex: 1;
+        min-height: 0;
+        padding: 0 10px;
+    }
+
+    .slot-name { font-size: 0.55rem; }
+    .slot-status { font-size: 0.75rem; }
+    .slot::after { font-size: 1rem; }
+    .free .slot-status::after,
+    .occupied .slot-status::after { font-size: 0.65rem; }
+
+    .road-area {
+        flex-grow: 1;
+        height: 100%;
+        min-height: auto;
+        position: relative;
+    }
+
+    .title {
+        height: 105px;
+        text-align: center;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    .portal-out {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 0.65rem;
+        gap: 5px;
+    }
+
+    .portal-out::before {
+        font-size: 0.6rem;
+        padding: 2px 4px;
+    }
+
+    .road-line-vertical {
+        left: 20px;
+        top: 60px;
+        bottom: 120px;
+        width: 50px;
+    }
+
+    .road-line-vertical::after { background-size: 100% 30px; }
+
+    .road-line-horizontal {
+        left: 20px;
+        top: 60px;
+        right: 20px;
+        height: 50px;
+    }
+
+    .road-line-horizontal::after { background-size: 30px 100%; }
+
+    .road-label {
+        left: -24px;
+        font-size: 0.9rem;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+        color: #ffffff;
+
+    }
+
+    .portal-wrapper {
+        height: 45px;
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .portal-in { font-size: 0.7rem; padding: 0 12px; }
+    .portal-in::after { font-size: 1rem; }
+
+    /* Building Map — Mobile */
+    .zone-motor-top {
+        top: 8px;
+        left: 75px;
+        right: auto;
+        height: 48px;
+    }
+
+    .building-map {
+        top: 115px;
+        left: 75px;
+        right: 8px;
+        bottom: 45px;
+        gap: 5px;
+    }
+
+    .zone-motor-bottom { height: 48px; }
+
+    .zone-label { font-size: 0.58rem; letter-spacing: 0.8px; }
+    .zone-lift .zone-label { font-size: 0.62rem; }
+    .lift-icon { font-size: 0.85rem; }
+
+    .zone-slots-right { gap: 4px; }
+
+    .map-slot-label { font-size: 0.42rem; letter-spacing: 0; }
+    .map-slot::before { width: 2px; }
+}
+
+/* =========================================
+   RESPONSIVE (MOBILE) ≤ 480px
+   ========================================= */
+@media (max-width: 480px) {
+    .main-container {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    .left-section {
+        width: 120px;
+        padding-right: 8px;
+    }
+
+    /* ★ PERUBAHAN 1+2 untuk 480px juga */
+    .parking-lane {
+        gap: 2px;
+        overflow: hidden;
+        flex-grow: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding-right: 0;
+        padding-bottom: 0;
+    }
+
+    .slot {
+        flex: 1;
+        min-height: 0;
+        padding: 0 8px;
+    }
+
+    .slot-name { font-size: 0.5rem; }
+    .slot-status { font-size: 0.7rem; }
+
+    .title {
+        font-size: 0.9rem;
+        bottom: -70px;
+    }
+
+    .road-line-vertical { left: 15px; width: 40px; }
+
+    .road-line-horizontal {
+        left: 15px;
+        right: 15px;
+        height: 40px;
+    }
+
+    .portal-out { padding: 5px 10px; font-size: 0.6rem; }
+    .portal-in { font-size: 0.65rem; padding: 0 10px; }
+
+    .zone-motor-top {
+        top: 6px;
+        left: 60px;
+        right: 130px;
+        height: 38px;
+    }
+
+    .building-map {
+        left: 60px;
+        top: 105px;
+        gap: 4px;
+    }
+
+    .zone-motor-bottom { height: 38px; }
+
+    .zone-label { font-size: 0.5rem; }
+    .zone-middle { gap: 4px; }
+    .map-slot-label { font-size: 0.38rem; }
 }
 
 
@@ -563,247 +782,3 @@ body {
     box-shadow: 0 0 5px var(--color-busy);
 }
 .offline .status-text { color: var(--color-busy); }
-
-
-/* =========================================
-   RESPONSIVE (MOBILE) ≤ 768px
-   ========================================= */
-@media (max-width: 768px) {
-    body {
-        overflow: hidden;
-        height: 100vh;
-    }
-
-    .main-container {
-        flex-direction: row;
-        height: 100vh;
-        width: 100%;
-        margin: 0;
-        border-radius: 0;
-        padding: 10px;
-        gap: 10px;
-    }
-
-    /* ── KIRI ── */
-    .left-section {
-        width: 130px;
-        min-width: 130px;
-        height: 100%;
-        border-right: 2px dashed #3f4a61;
-        border-bottom: none;
-        padding-right: 8px;
-        padding-bottom: 0;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .parking-lane {
-        gap: 6px;
-        overflow-y: auto;
-        flex-grow: 1;
-    }
-
-    .slot {
-        min-height: 46px;
-        padding: 0 8px;
-    }
-    .slot-name { font-size: 0.5rem; }
-    .slot-status { font-size: 0.72rem; }
-    .slot::after { font-size: 0.95rem; }
-    .free .slot-status::after,
-    .occupied .slot-status::after { font-size: 0.6rem; }
-
-    .portal-wrapper {
-        height: 42px;
-        margin-top: 8px;
-        flex-shrink: 0;
-    }
-    .portal-in { font-size: 0.65rem; padding: 0 10px; }
-    .portal-in::after { font-size: 0.95rem; }
-
-    /* ── KANAN (road-area) ── */
-    .road-area {
-        flex-grow: 1;
-        height: 100%;
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* Judul — turunkan ke bawah, jangan tumpang tindih */
-    .title {
-        position: absolute;
-        bottom: 8px;
-        left: 20px;
-        right: 0;
-        text-align: center;
-        font-size: 0.85rem;
-        font-weight: 800;
-        z-index: 10;
-        /* Pastikan tidak tertimpa motor bottom */
-        line-height: 1.2;
-    }
-
-    /* Portal Keluar */
-    .portal-out {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        padding: 5px 10px;
-        font-size: 0.6rem;
-        gap: 5px;
-        z-index: 6;
-    }
-    .portal-out::before {
-        font-size: 0.55rem;
-        padding: 1px 4px;
-    }
-
-    /* ── Variabel jalan untuk mobile ──
-       road-vertical : left=0, width=44px
-       road-horizontal: top=40px, height=44px
-       zone-motor-top : top=0, left=44px, height=36px (masuk di atas jalan horiz)
-       building-map   : top=88px (40+44+4gap), left=44px
-    */
-
-    /* Jalan vertikal */
-    .road-line-vertical {
-        left: 0;
-        top: 40px;        /* sejajar dengan jalan horizontal */
-        bottom: 0;
-        width: 44px;
-    }
-    .road-line-vertical::after { background-size: 100% 28px; }
-
-    /* Jalan horizontal */
-    .road-line-horizontal {
-        left: 0;
-        top: 40px;
-        right: 0;         /* melebar penuh */
-        height: 44px;
-    }
-    .road-line-horizontal::after { background-size: 28px 100%; }
-
-    .road-label {
-        left: -18px;
-        font-size: 0.7rem;
-        letter-spacing: 0.8px;
-        color: #ffffff;
-        white-space: nowrap;
-    }
-
-    /* Zona Motor Atas
-       harus berada di ATAS jalan horizontal (top < 40px)
-       dan di KANAN jalan vertikal (left >= 44px)          */
-    .zone-motor-top {
-        top: 4px;
-        left: 48px;       /* 44px + 4px gap */
-        right: 8px;
-        height: 32px;     /* top(4) + height(32) = 36 < road top(40) ✓ */
-        border-radius: 6px;
-    }
-    .zone-motor-top::before {
-        background-size: 20px 100%;
-    }
-
-    /* Building Map
-       mulai setelah jalan horizontal: top = 40 + 44 + 4 = 88px
-       left = setelah jalan vertikal: 44 + 4 = 48px          */
-    .building-map {
-        top: 92px;        /* 40 + 44 + 8px gap */
-        left: 48px;
-        right: 6px;
-        bottom: 36px;     /* ruang untuk judul */
-        gap: 4px;
-    }
-
-    /* Motor bawah lebih kecil */
-    .zone-motor-bottom {
-        height: 40px;
-        flex-shrink: 0;
-    }
-    .zone-motor-bottom::before {
-        background-size: 20px 100%;
-    }
-
-    .zone-label { font-size: 0.52rem; letter-spacing: 0.6px; }
-    .zone-lift .zone-label { font-size: 0.55rem; }
-    .lift-icon { font-size: 0.8rem; }
-
-    .zone-middle { gap: 4px; }
-    .zone-slots-right { gap: 3px; }
-
-    .map-slot-label { font-size: 0.4rem; letter-spacing: 0; }
-    .map-slot::before { width: 2px; }
-}
-
-
-/* =========================================
-   RESPONSIVE (MOBILE) ≤ 480px
-   ========================================= */
-@media (max-width: 480px) {
-    .main-container {
-        padding: 6px;
-        gap: 7px;
-    }
-
-    .left-section {
-        width: 110px;
-        min-width: 110px;
-        padding-right: 6px;
-    }
-
-    .slot { min-height: 42px; padding: 0 6px; }
-    .slot-name { font-size: 0.45rem; }
-    .slot-status { font-size: 0.65rem; }
-
-    .title {
-        font-size: 0.75rem;
-        bottom: 5px;
-    }
-
-    /* Sesuaikan ulang jalan untuk layar sangat kecil */
-    .road-line-vertical {
-        left: 0;
-        top: 36px;
-        width: 38px;
-    }
-    .road-line-horizontal {
-        left: 0;
-        top: 36px;
-        right: 0;
-        height: 38px;
-    }
-
-    .zone-motor-top {
-        top: 3px;
-        left: 42px;       /* 38 + 4 */
-        right: 120px;
-        height: 29px;     /* 3 + 29 = 32 < 36 ✓ */
-    }
-
-    .building-map {
-        top: 80px;        /* 36 + 38 + 6 */
-        left: 42px;
-        right: 4px;
-        bottom: 30px;
-        gap: 3px;
-    }
-
-    .zone-motor-bottom { height: 34px; }
-
-    .zone-label { font-size: 0.45rem; }
-    .zone-middle { gap: 3px; }
-    .zone-slots-right { gap: 2px; }
-    .map-slot-label { font-size: 0.35rem; }
-
-    .portal-out {
-        top: 5px;
-        right: 5px;
-        padding: 4px 8px;
-        font-size: 0.55rem;
-    }
-
-    .portal-wrapper { height: 38px; margin-top: 6px; }
-    .portal-in { font-size: 0.6rem; padding: 0 8px; }
-}
