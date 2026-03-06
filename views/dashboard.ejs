@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Parkir Otomatis- Gedung Pinisi</title>
+    <title>Monitoring Parkir Otomatis - Gedung Pinisi</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -24,35 +24,34 @@
                             <span class="slot-status" id="status-text-<%= i %>">Kosong</span>
                         </div>
                     </div>
-                    <% } %>
+                <% } %>
             </div>
 
-            <!-- Cari bagian status-header -->
+            <!-- Status Server -->
             <div class="status-header">
-                <span class="status-label">STATUS SERVER:</span> <!-- Ganti Label ini -->
-                <div class="status-indicator offline" id="server-indicator"> <!-- Default offline -->
+                <span class="status-label">STATUS SERVER:</span>
+                <div class="status-indicator offline" id="server-indicator">
                     <span class="status-dot"></span>
-                    <span class="status-text" id="connection-text">WAITING...</span>
+                    <span class="status-text" id="connection-text">MENUNGGU DATA</span>
                 </div>
             </div>
 
-            <!-- Portal Masuk (Sekarang di bawah slot) -->
+            <!-- Portal Masuk -->
             <div class="portal-wrapper">
                 <div class="portal portal-in">
                     <span>Portal Masuk</span>
                 </div>
-                <!-- Tombol Exit kecil di samping portal -->
                 <div class="gate-bar-in">Exit</div>
             </div>
 
         </div>
 
-        <!-- KOLOM KANAN: JALAN & PORTAL KELUAR -->
+        <!-- KOLOM KANAN: JALAN & PETA GEDUNG -->
         <div class="road-area">
 
             <h1 class="title">Basement Parkir Gedung Pinisi</h1>
 
-            <!-- Garis Jalan (Menghubungkan Portal Masuk ke Keluar) -->
+            <!-- Garis Jalan -->
             <div class="road-line-vertical">
                 <span class="road-label">Jalan Keluar</span>
             </div>
@@ -63,6 +62,70 @@
                 <span>Portal Keluar</span>
             </div>
             <div class="gate-bar-out">Exit</div>
+
+            <!-- Zona Motor Atas -->
+            <div class="zone-motor-top">
+                <span class="zone-label">Parkiran Motor</span>
+            </div>
+
+            <!-- ===== PETA BASEMENT ===== -->
+            <div class="building-map">
+
+                <div class="zone-middle">
+
+                    <!-- Parkiran Mobil -->
+                    <div class="zone-car">
+                        <span class="zone-label">Parkiran Mobil</span>
+                    </div>
+
+                    <!-- Lift -->
+                    <div class="zone-lift">
+                        <span class="zone-label">Lift</span>
+                        <span class="lift-icon">⬆</span>
+                    </div>
+
+                    <!-- Slot KABID — masing-masing dengan label berbeda -->
+                    <div class="zone-slots-right">
+
+                        <div class="map-slot free" id="map-slot-1">
+                            <span class="map-slot-label">Kabid 1</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-2">
+                            <span class="map-slot-label">Kabid 2</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-3">
+                            <span class="map-slot-label">Kabid 3</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-4">
+                            <span class="map-slot-label">Kabid 4</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-5">
+                            <span class="map-slot-label">Kabid 5</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-6">
+                            <span class="map-slot-label">Kabid 6</span>
+                        </div>
+
+                        <div class="map-slot free" id="map-slot-7">
+                            <span class="map-slot-label">Kabid 7</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Zona Parkiran Motor Bawah -->
+                <div class="zone-motor-bottom">
+                    <span class="zone-label">Parkiran Motor</span>
+                </div>
+
+            </div>
+            <!-- ===== END PETA BASEMENT ===== -->
 
         </div>
     </div>

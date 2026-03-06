@@ -9,6 +9,12 @@
     --color-busy: #ef4444;
     --text-main: #ffffff;
     --text-muted: #94a3b8;
+
+    --bg-zone: #1a2235;
+    --bg-zone-mid: #1e2a3d;
+    --border-zone: #2e3d55;
+    --border-zone-bright: #3d5070;
+    --color-zone-text: #94a3b8;
 }
 
 * {
@@ -24,7 +30,7 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 /* --- CONTAINER UTAMA --- */
@@ -46,7 +52,7 @@ body {
 .left-section {
     display: flex;
     flex-direction: column;
-    width: 350px; 
+    width: 350px;
     height: 100%;
     border-right: 2px dashed #3f4a61;
     padding-right: 20px;
@@ -58,7 +64,7 @@ body {
     flex-direction: column;
     gap: 10px;
     flex-grow: 1;
-    overflow-y: auto; 
+    overflow-y: auto;
     padding-right: 5px;
     padding-bottom: 10px;
 }
@@ -77,7 +83,7 @@ body {
     align-items: center;
     padding: 0 15px;
     transition: all 0.3s ease;
-    background-color: rgba(0,0,0,0.2); 
+    background-color: rgba(0,0,0,0.2);
     border: 1px solid #3f4a61;
 }
 
@@ -113,14 +119,14 @@ body {
 /* WARNA STATUS */
 .free {
     border: 1px solid var(--color-free);
-    background: rgba(16, 185, 129, 0.1); 
+    background: rgba(16, 185, 129, 0.1);
     color: var(--color-free);
 }
 .free .slot-status::after { content: '✔'; font-size: 0.8rem; }
 
 .occupied {
     border: 1px solid var(--color-busy);
-    background: rgba(239, 68, 68, 0.1); 
+    background: rgba(239, 68, 68, 0.1);
     color: var(--color-busy);
 }
 .occupied .slot-status::after { content: '✖'; font-size: 0.8rem; }
@@ -150,7 +156,7 @@ body {
 }
 
 .portal-in::after { content: '→'; font-size: 1.2rem; color: var(--color-free); }
-.gate-bar-in { display: none; } 
+.gate-bar-in { display: none; }
 
 /* --- BAGIAN KANAN (AREA JALAN / PETA) --- */
 .road-area {
@@ -158,10 +164,10 @@ body {
     position: relative;
     background: rgba(0,0,0,0.1);
     border-radius: 12px;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-/* Judul (Default Desktop: di bawah) */
+/* Judul */
 .title {
     position: absolute;
     bottom: 20px;
@@ -176,13 +182,13 @@ body {
 /* JALAN RAYA */
 .road-line-vertical {
     position: absolute;
-    left: 40px; 
-    bottom: 0; 
+    left: 40px;
+    bottom: 0;
     top: 90px;
-    width: 80px; 
-    background-color: var(--bg-road); 
-    border-left: 3px solid #475569; 
-    border-right: 3px solid #475569; 
+    width: 80px;
+    background-color: var(--bg-road);
+    border-left: 3px solid #475569;
+    border-right: 3px solid #475569;
     z-index: 1;
 }
 
@@ -193,16 +199,16 @@ body {
     width: 4px;
     transform: translateX(-50%);
     background: linear-gradient(to bottom, #94a3b8 50%, transparent 50%);
-    background-size: 100% 60px; 
+    background-size: 100% 60px;
     opacity: 0.5;
 }
 
 .road-line-horizontal {
     position: absolute;
-    left: 40px; 
+    left: 40px;
     top: 90px;
-    right: 180px; 
-    height: 80px; 
+    right: 180px;
+    height: 80px;
     background-color: var(--bg-road);
     border-top: 3px solid #475569;
     border-bottom: 3px solid #475569;
@@ -259,7 +265,308 @@ body {
 
 
 /* =========================================
-   RESPONSIVE (MOBILE) - LAYOUT SEPERTI DESKTOP
+   KOMPONEN PETA GEDUNG
+   ========================================= */
+
+/* --- ZONA MOTOR ATAS --- */
+.zone-motor-top {
+    position: absolute;
+    top: 8px;
+    left: 125px;
+    right: 200px;
+    height: 78px;
+    background: var(--bg-zone);
+    border: 1.5px solid var(--border-zone);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 3;
+}
+
+.zone-motor-top::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 28px,
+        rgba(255,255,255,0.02) 28px,
+        rgba(255,255,255,0.02) 30px
+    );
+    pointer-events: none;
+}
+
+/* --- WRAPPER BASEMENT MAP --- */
+.building-map {
+    position: absolute;
+    top: 175px;
+    left: 125px;
+    right: 20px;
+    bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2;
+}
+
+/* --- BASE STYLE ZONE --- */
+.zone-motor-bottom,
+.zone-car,
+.zone-lift {
+    background: var(--bg-zone);
+    border: 1.5px solid var(--border-zone);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Stripe texture motor */
+.zone-motor-top::before,
+.zone-motor-bottom::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 28px,
+        rgba(255,255,255,0.02) 28px,
+        rgba(255,255,255,0.02) 30px
+    );
+    pointer-events: none;
+}
+
+/* Stripe texture mobil */
+.zone-car::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 38px,
+        rgba(255,255,255,0.02) 38px,
+        rgba(255,255,255,0.02) 40px
+    );
+    pointer-events: none;
+}
+
+/* --- LABEL ZONE --- */
+.zone-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-zone-text);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- ZONA TENGAH --- */
+.zone-middle {
+    display: flex;
+    flex-grow: 1;
+    gap: 6px;
+    min-height: 0;
+}
+
+/* --- ZONA PARKIRAN MOBIL --- */
+.zone-car {
+    flex: 1.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zone-car .zone-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+}
+
+/* --- ZONA LIFT --- */
+.zone-lift {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    overflow: visible;
+}
+
+.zone-lift .zone-label {
+    font-size: 0.85rem;
+}
+
+.lift-icon {
+    font-size: 1.2rem;
+    opacity: 0.25;
+    color: var(--color-zone-text);
+    line-height: 1;
+}
+
+/* --- ZONA SLOT KANAN (KABID) --- */
+.zone-slots-right {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: stretch;
+}
+
+/* Setiap slot di peta */
+.map-slot {
+    flex: 1;
+    background: var(--bg-zone);
+    border: 1.5px solid var(--border-zone-bright);
+    border-radius: 6px;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Label di tengah slot */
+.map-slot-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--color-zone-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+    opacity: 0.8;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Strip status */
+.map-slot::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--border-zone-bright);
+    border-radius: 6px 0 0 6px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* STATUS: KOSONG (free) */
+.map-slot.free {
+    border-color: var(--color-free);
+    background: rgba(16, 185, 129, 0.08);
+}
+.map-slot.free::before {
+    background: var(--color-free);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+.map-slot.free .map-slot-label {
+    color: var(--color-free);
+    opacity: 1;
+}
+
+/* STATUS: TERISI (occupied) */
+.map-slot.occupied {
+    border-color: var(--color-busy);
+    background: rgba(239, 68, 68, 0.08);
+}
+.map-slot.occupied::before {
+    background: var(--color-busy);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+.map-slot.occupied .map-slot-label {
+    color: var(--color-busy);
+    opacity: 1;
+}
+
+/* --- ZONA PARKIRAN MOTOR BAWAH --- */
+.zone-motor-bottom {
+    width: 100%;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+
+/* =========================================
+   SERVER STATUS INDICATOR
+   ========================================= */
+.status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 5px 15px 5px;
+    border-bottom: 1px solid #3f4a61;
+    margin-bottom: 10px;
+}
+
+.status-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid #3f4a61;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #64748b;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.status-text {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #64748b;
+}
+
+/* ONLINE */
+.online {
+    border-color: var(--color-free);
+    background: rgba(16, 185, 129, 0.1);
+}
+.online .status-dot {
+    background-color: var(--color-free);
+    box-shadow: 0 0 10px var(--color-free);
+}
+.online .status-text { color: var(--color-free); }
+
+/* OFFLINE */
+.offline {
+    border-color: var(--color-busy);
+    background: rgba(239, 68, 68, 0.1);
+}
+.offline .status-dot {
+    background-color: var(--color-busy);
+    box-shadow: 0 0 5px var(--color-busy);
+}
+.offline .status-text { color: var(--color-busy); }
+
+
+/* =========================================
+   RESPONSIVE (MOBILE) ≤ 768px
    ========================================= */
 @media (max-width: 768px) {
     body {
@@ -274,236 +581,229 @@ body {
         margin: 0;
         border-radius: 0;
         padding: 10px;
-        gap: 15px;
+        gap: 10px;
     }
 
-    /* Bagian Slot Parkir - Tetap di Kiri */
+    /* ── KIRI ── */
     .left-section {
-        width: 140px;
+        width: 130px;
+        min-width: 130px;
         height: 100%;
         border-right: 2px dashed #3f4a61;
         border-bottom: none;
-        padding-right: 10px;
+        padding-right: 8px;
         padding-bottom: 0;
         flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .parking-lane {
-        gap: 8px;
+        gap: 6px;
         overflow-y: auto;
+        flex-grow: 1;
     }
 
-    /* Bagian Peta Jalan - Tetap di Kanan */
+    .slot {
+        min-height: 46px;
+        padding: 0 8px;
+    }
+    .slot-name { font-size: 0.5rem; }
+    .slot-status { font-size: 0.72rem; }
+    .slot::after { font-size: 0.95rem; }
+    .free .slot-status::after,
+    .occupied .slot-status::after { font-size: 0.6rem; }
+
+    .portal-wrapper {
+        height: 42px;
+        margin-top: 8px;
+        flex-shrink: 0;
+    }
+    .portal-in { font-size: 0.65rem; padding: 0 10px; }
+    .portal-in::after { font-size: 0.95rem; }
+
+    /* ── KANAN (road-area) ── */
     .road-area {
         flex-grow: 1;
         height: 100%;
-        min-height: auto;
         position: relative;
+        overflow: hidden;
     }
 
-    /* Judul */
+    /* Judul — turunkan ke bawah, jangan tumpang tindih */
     .title {
-        height: 105px;
+        position: absolute;
+        bottom: 8px;
+        left: 20px;
+        right: 0;
         text-align: center;
-        padding: 0;
-        font-size: 1rem;
+        font-size: 0.85rem;
+        font-weight: 800;
+        z-index: 10;
+        /* Pastikan tidak tertimpa motor bottom */
+        line-height: 1.2;
     }
 
     /* Portal Keluar */
     .portal-out {
-        top: 10px;
-        right: 10px;
-        padding: 6px 12px;
-        font-size: 0.65rem;
-        gap: 5px;
-    }
-
-    .portal-out::before {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        padding: 5px 10px;
         font-size: 0.6rem;
-        padding: 2px 4px;
+        gap: 5px;
+        z-index: 6;
+    }
+    .portal-out::before {
+        font-size: 0.55rem;
+        padding: 1px 4px;
     }
 
-    /* Jalan Vertikal */
+    /* ── Variabel jalan untuk mobile ──
+       road-vertical : left=0, width=44px
+       road-horizontal: top=40px, height=44px
+       zone-motor-top : top=0, left=44px, height=36px (masuk di atas jalan horiz)
+       building-map   : top=88px (40+44+4gap), left=44px
+    */
+
+    /* Jalan vertikal */
     .road-line-vertical {
-        left: 20px;
-        top: 60px;
-        bottom: 120px;
-        width: 50px;
+        left: 0;
+        top: 40px;        /* sejajar dengan jalan horizontal */
+        bottom: 0;
+        width: 44px;
     }
+    .road-line-vertical::after { background-size: 100% 28px; }
 
-    .road-line-vertical::after {
-        background-size: 100% 30px;
-    }
-
-    /* Jalan Horizontal */
+    /* Jalan horizontal */
     .road-line-horizontal {
-        left: 20px;
-        top: 60px;
-        right: 20px;
-        height: 50px;
+        left: 0;
+        top: 40px;
+        right: 0;         /* melebar penuh */
+        height: 44px;
     }
+    .road-line-horizontal::after { background-size: 28px 100%; }
 
-    .road-line-horizontal::after {
-        background-size: 30px 100%;
-    }
-
-    /* Label Jalan */
     .road-label {
-        left: -30px;
-        font-size: 0.55rem;
-        letter-spacing: 1px;
-    }
-
-    /* Portal Masuk */
-    .portal-wrapper {
-        height: 45px;
-        margin-top: 10px;
-        margin-bottom: 120px;
-    }
-
-    .portal-in {
+        left: -18px;
         font-size: 0.7rem;
-        padding: 0 12px;
+        letter-spacing: 0.8px;
+        color: #ffffff;
+        white-space: nowrap;
     }
 
-    .portal-in::after {
-        font-size: 1rem;
+    /* Zona Motor Atas
+       harus berada di ATAS jalan horizontal (top < 40px)
+       dan di KANAN jalan vertikal (left >= 44px)          */
+    .zone-motor-top {
+        top: 4px;
+        left: 48px;       /* 44px + 4px gap */
+        right: 8px;
+        height: 32px;     /* top(4) + height(32) = 36 < road top(40) ✓ */
+        border-radius: 6px;
+    }
+    .zone-motor-top::before {
+        background-size: 20px 100%;
     }
 
-    /* Slot */
-    .slot {
-        min-height: 50px;
-        padding: 0 10px;
+    /* Building Map
+       mulai setelah jalan horizontal: top = 40 + 44 + 4 = 88px
+       left = setelah jalan vertikal: 44 + 4 = 48px          */
+    .building-map {
+        top: 92px;        /* 40 + 44 + 8px gap */
+        left: 48px;
+        right: 6px;
+        bottom: 36px;     /* ruang untuk judul */
+        gap: 4px;
     }
 
-    .slot-name {
-        font-size: 0.55rem;
+    /* Motor bawah lebih kecil */
+    .zone-motor-bottom {
+        height: 40px;
+        flex-shrink: 0;
+    }
+    .zone-motor-bottom::before {
+        background-size: 20px 100%;
     }
 
-    .slot-status {
-        font-size: 0.75rem;
-    }
+    .zone-label { font-size: 0.52rem; letter-spacing: 0.6px; }
+    .zone-lift .zone-label { font-size: 0.55rem; }
+    .lift-icon { font-size: 0.8rem; }
 
-    .slot::after {
-        font-size: 1rem;
-    }
+    .zone-middle { gap: 4px; }
+    .zone-slots-right { gap: 3px; }
 
-    .free .slot-status::after,
-    .occupied .slot-status::after {
-        font-size: 0.65rem;
-    }
+    .map-slot-label { font-size: 0.4rem; letter-spacing: 0; }
+    .map-slot::before { width: 2px; }
 }
 
+
+/* =========================================
+   RESPONSIVE (MOBILE) ≤ 480px
+   ========================================= */
 @media (max-width: 480px) {
     .main-container {
-        padding: 8px;
-        gap: 10px;
+        padding: 6px;
+        gap: 7px;
     }
 
     .left-section {
-        width: 120px;
-        padding-right: 8px;
+        width: 110px;
+        min-width: 110px;
+        padding-right: 6px;
     }
+
+    .slot { min-height: 42px; padding: 0 6px; }
+    .slot-name { font-size: 0.45rem; }
+    .slot-status { font-size: 0.65rem; }
 
     .title {
-        font-size: 0.9rem;
-        bottom: 10px;
+        font-size: 0.75rem;
+        bottom: 5px;
     }
 
+    /* Sesuaikan ulang jalan untuk layar sangat kecil */
     .road-line-vertical {
-        left: 15px;
-        width: 40px;
+        left: 0;
+        top: 36px;
+        width: 38px;
+    }
+    .road-line-horizontal {
+        left: 0;
+        top: 36px;
+        right: 0;
+        height: 38px;
     }
 
-    .road-line-horizontal {
-        left: 15px;
-        right: 15px;
-        height: 40px;
+    .zone-motor-top {
+        top: 3px;
+        left: 42px;       /* 38 + 4 */
+        right: 120px;
+        height: 29px;     /* 3 + 29 = 32 < 36 ✓ */
     }
+
+    .building-map {
+        top: 80px;        /* 36 + 38 + 6 */
+        left: 42px;
+        right: 4px;
+        bottom: 30px;
+        gap: 3px;
+    }
+
+    .zone-motor-bottom { height: 34px; }
+
+    .zone-label { font-size: 0.45rem; }
+    .zone-middle { gap: 3px; }
+    .zone-slots-right { gap: 2px; }
+    .map-slot-label { font-size: 0.35rem; }
 
     .portal-out {
-        padding: 5px 10px;
-        font-size: 0.6rem;
+        top: 5px;
+        right: 5px;
+        padding: 4px 8px;
+        font-size: 0.55rem;
     }
 
-    .slot {
-        min-height: 45px;
-        padding: 0 8px;
-    }
-
-    .slot-name {
-        font-size: 0.5rem;
-    }
-
-    .slot-status {
-        font-size: 0.7rem;
-    }
-
-    .portal-in {
-        font-size: 0.65rem;
-        padding: 0 10px;
-    }
+    .portal-wrapper { height: 38px; margin-top: 6px; }
+    .portal-in { font-size: 0.6rem; padding: 0 8px; }
 }
-
-/* --- SERVER STATUS INDICATOR --- */
-.status-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 5px 15px 5px;
-    border-bottom: 1px solid #3f4a61;
-    margin-bottom: 10px;
-}
-
-.status-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 10;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,0,0,0.3);
-    padding: 5px 10px;
-    border-radius: 20px;
-    border: 1px solid #3f4a61;
-    transition: all 0.3s ease;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #64748b; /* Warna default abu */
-    transition: all 0.3s ease;
-}
-
-.status-text {
-    font-size: 0.55rem;
-    font-weight: 800;
-    color: #64748b;
-}
-
-/* KONDISI ONLINE (HIJAU MENYALA) */
-.online {
-    border-color: var(--color-free);
-    background: rgba(16, 185, 129, 0.1);
-}
-.online .status-dot {
-    background-color: var(--color-free);
-    box-shadow: 0 0 10px var(--color-free); /* Efek Neon */
-}
-.online .status-text { color: var(--color-free); }
-
-/* KONDISI OFFLINE (MERAH) */
-.offline {
-    border-color: var(--color-busy);
-    background: rgba(239, 68, 68, 0.1);
-}
-.offline .status-dot {
-    background-color: var(--color-busy);
-    box-shadow: 0 0 5px var(--color-busy);
-}
-.offline .status-text { color: var(--color-busy); }
